@@ -4,40 +4,30 @@ include .env
 
 push:
 	git add .
-	git commit -m "init, tests"
+	git commit -m "verify selector, decode"
 	git push origin master
 
-interaction-sepolia:
-	forge script script/Interactions.s.sol:$(INTERACTION) --private-key $(PRIVATE_KEY_METAMASK) --rpc-url $(RPC_URL_SEPOLIA_ALCHEMY) --broadcast
 
-test-fork:
-	forge test --mt testPerformUpkeepRunsWhenCheckUpkeepIsTrue --fork-url $(RPC_URL_SEPOLIA_ALCHEMY)  -vvvv
+# Tool to know exactly !which function! my tx is calling
+#
+# 0. Check contract address
+# 1. Compare the selector returned by this sig 
+# with the selector on metamask data tx
+# 2. Decode with calldata (below)
+#
+# NB. the signature name on metamask on AAVE for depositing ETH is different from the actual called
+# Deposit E T H (Address, Address, Uint16) >> go trough the code instead!
+# depositETH(address,address,uint16)
+# source: contract code & 4byte.directory
+verify-selector-on-metamask:
+	cast sig 'depositETH(address,address,uint16)'
 
-install:
-	forge install OpenZeppelin/openzeppelin-contracts --no-commit
-
-dependencies:
-	   brew install jq
-
-install-all:
-	forge install Cyfrin/foundry-devops@0.0.11 --no-commit && forge install smartcontractkit/chainlink-brownie-contracts@0.6.1 --no-commit && forge install foundry-rs/forge-std@v1.5.3 --no-commit && forge install transmissions11/solmate@v6 --no-commit
-
-deploy-sepolia:
-	forge script script/HappyNFTDeploy.s.sol:HappyNFTDeploy --rpc-url $(RPC_URL_SEPOLIA_ALCHEMY) --private-key $(PRIVATE_KEY_METAMASK) --broadcast --verify --etherscan-api-key $(API_KEY_ETHERSCAN) -vvvv
-
-deploy-anvil:
-	forge script script/HappyNFTDeploy.s.sol:HappyNFTDeploy --rpc-url $(RPC_URL_ANVIL)  --private-key $(PRIVATE_KEY_ANVIL) --gas-limit 4700000 --broadcast -vvvv
-
-mint-sepolia:
-	forge script script/Interactions.s.sol:MintProgrammatically --rpc-url $(RPC_URL_SEPOLIA_ALCHEMY) --private-key $(PRIVATE_KEY_METAMASK) --broadcast --verify --etherscan-api-key $(API_KEY_ETHERSCAN) -vvvv
-
-test-sepolia:
-	forge test --rpc-url $(RPC_URL_SEPOLIA_ALCHEMY)
-
-convert-svg-base64:
-	base64 -i img/guineaPig2.svg
-
+# Shows the real input that the function is using
+# @params takes function sig + tx data
+# @return calls
+# 
 decode:
-	cast call 0x5FbDB2315678afecb367f032d93F642f64180aa3 "decodeString()" --rpc-url $(RPC_URL_ANVIL)  --private-key $(PRIVATE_KEY_ANVIL) 
+	cast --calldata-decode "depositETH(address,address,uint16)" 0x474cf53d00000000000000000000000087870bca3f3fd6335c3f4ce8392d69350b4fa4e2000000000000000000000000449dabbfeb5aabc3a9477c02f47933b19250d72a0000000000000000000000000000000000000000000000000000000000000000
+	
 
 

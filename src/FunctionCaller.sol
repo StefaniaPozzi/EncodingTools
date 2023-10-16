@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.18;
 
-contract LowLevelFunctionsSandbox {
+contract FunctionCaller {
     address public s_alice;
     uint256 public s_amount;
 
