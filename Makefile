@@ -4,7 +4,7 @@ include .env
 
 push:
 	git add .
-	git commit -m "verify selector, decode"
+	git commit -m "delegatecall"
 	git push origin master
 
 
