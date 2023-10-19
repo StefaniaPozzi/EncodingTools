@@ -59,7 +59,7 @@ contract ImplementationA {
     }
 
     /**
-     * 
+     * Never be called
     */
     function setImplementation(address test) public{}
 }

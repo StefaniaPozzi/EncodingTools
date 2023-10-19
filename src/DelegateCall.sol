@@ -8,6 +8,7 @@ contract CalledContract {
     uint256 public varStoredAtAddress2Value;
     uint256 public differentTypeLayout0;
 
+    //
     constructor(address _owner) {
         varStoredAtAddress1Address = _owner;
     }
@@ -15,9 +16,9 @@ contract CalledContract {
      * Unmodifiable variables from the caller:
      * 1. msg.sender
      * 2. msg.value
-     * 3. address(this) / storage variables > check following function
+     * 3. address(this) storage variables > are set in the constructor during its own deployment
      *
-     * He cannot access the Caller (3) unmodifiable values.
+     * This contract cannot access the Caller (3) unmodifiable values (bottom-up).
      */
 
     function setVariables(uint256 _number) public payable {

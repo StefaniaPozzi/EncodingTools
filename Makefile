@@ -1,10 +1,10 @@
-include .env 
+include .env #source .env on terminal
 
 .PHONY: push, interaction
 
 push:
 	git add .
-	git commit -m "set simple proxy"
+	git commit -m "set UUPS proxy"
 	git push origin master
 
 
@@ -29,7 +29,21 @@ verify-selector-on-metamask:
 decode:
 	cast --calldata-decode "depositETH(address,address,uint16)" 0x474cf53d00000000000000000000000087870bca3f3fd6335c3f4ce8392d69350b4fa4e2000000000000000000000000449dabbfeb5aabc3a9477c02f47933b19250d72a0000000000000000000000000000000000000000000000000000000000000000
 
+#mif some packeges are already installed -> lazy && operator
 install:
-	forge install OpenZeppelin/openzeppelin-contracts --no-commit
+	forge install OpenZeppelin/openzeppelin-contracts --no-commit && OpenZeppelin/openzeppelin-contracts-upgradeable  --no-commit  && Cyfrin/foundry-devops@0.0.11 --no-commit
 
+#simulation if --broadcast is not present
+deploy:
+	forge script script/BoxDeploy.s.sol:BoxDeploy --rpc-url $(RPC_URL_SEPOLIA_ALCHEMY) --private-key $(PRIVATE_KEY_METAMASK) --broadcast
 
+# DevOpsTools requires --ffi
+upgrade:
+	forge script script/BoxUpgrade.s.sol:BoxUpgrade --rpc-url $(RPC_URL_SEPOLIA_ALCHEMY) --private-key $(PRIVATE_KEY_METAMASK) --ffi --broadcast
+
+check-version-upgraded:
+	cast call 0x41836F1bc0e1E6b5d9445a0b550830D5BF578778 "version()" --rpc-url $(RPC_URL_SEPOLIA_ALCHEMY) 
+
+#call box2 function
+setNumber:
+	cast send 0x41836F1bc0e1E6b5d9445a0b550830D5BF578778 "setNumber()" 77 --rpc-url $(RPC_URL_SEPOLIA_ALCHEMY) --private-key $(PRIVATE_KEY_METAMASK)
