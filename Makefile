@@ -4,7 +4,7 @@ include .env
 
 push:
 	git add .
-	git commit -m "delegatecall"
+	git commit -m "set simple proxy"
 	git push origin master
 
 
@@ -28,6 +28,8 @@ verify-selector-on-metamask:
 # 
 decode:
 	cast --calldata-decode "depositETH(address,address,uint16)" 0x474cf53d00000000000000000000000087870bca3f3fd6335c3f4ce8392d69350b4fa4e2000000000000000000000000449dabbfeb5aabc3a9477c02f47933b19250d72a0000000000000000000000000000000000000000000000000000000000000000
-	
+
+install:
+	forge install OpenZeppelin/openzeppelin-contracts --no-commit
 
 
