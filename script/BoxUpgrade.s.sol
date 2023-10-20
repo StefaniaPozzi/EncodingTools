@@ -23,7 +23,7 @@ contract BoxUpgrade is Script {
         // we need to call the upgrade on the V1 contract itself
         // this is also correct: UUPSUpgradeable contractToBeUpgraded = UUPSUpgradeable(payable(proxy));
         BOXV1 proxy = BOXV1(payable(proxy));
-        proxy.upgradeTo(contractToBeUpgradedWith);
+        proxy.upgradeToAndCall(contractToBeUpgradedWith, new bytes(0));
         return address(proxy); //this will never change
     }
 }
