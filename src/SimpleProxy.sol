@@ -35,11 +35,11 @@ contract SimpleProxy is Proxy {
 
     /**
      * @dev to be sent inside calldata transaction
-     * !! It will trigger the fallback function inside Proxy 
+     * !! It will trigger the fallback function inside Proxy
      * and this will delegatecall to the desired function!!
      * @return bytes that contain the function we want to call
-     * 
-    */
+     *
+     */
     function getDataToTransact(uint256 numberToUpdate) public pure returns (bytes memory) {
         return abi.encodeWithSignature("setValue(uint256)", numberToUpdate);
     }
@@ -60,14 +60,14 @@ contract ImplementationA {
 
     /**
      * Never be called
-    */
-    function setImplementation(address test) public{}
+     */
+    function setImplementation(address test) public {}
 }
 
-contract ImplementationB{
+contract ImplementationB {
     uint256 public value;
 
     function setValue(uint256 _value) public {
-        value = _value+2;
+        value = _value + 2;
     }
 }

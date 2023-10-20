@@ -9,7 +9,7 @@ import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/Own
 contract BOXV2 is Initializable, UUPSUpgradeable, OwnableUpgradeable {
     uint256 internal number;
 
-    constructor () {
+    constructor() {
         _disableInitializers();
     }
 
@@ -25,6 +25,5 @@ contract BOXV2 is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         return 2;
     }
 
-    function _authorizeUpgrade(address newImplementation) internal override {
-    }
+    function _authorizeUpgrade(address newImplementation) internal override {}
 }
